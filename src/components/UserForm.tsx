@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import UserDetailsStep from "./UserDetailsStep";
 
 export interface User {
@@ -13,19 +13,35 @@ function useFormFields<T>(
   initialState: T
 ): [
   T,
-  (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void
+  (
+    event:
+      | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+      | React.ChangeEvent<{ name?: string | undefined; value: unknown }>
+  ) => void
 ] {
   const [inputs, setValues] = useState<T>(initialState);
 
   return [
     inputs,
     function (
-      event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+      event:
+        | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+        | ChangeEvent<{
+            name?: string | undefined;
+            value: unknown;
+          }>
     ) {
-      setValues({
-        ...inputs,
-        [event.target.id]: event.target.value,
-      });
+      if ("id" in event.target) {
+        setValues({
+          ...inputs,
+          [event.target.id]: event.target.value,
+        });
+      } else {
+        setValues({
+          ...inputs,
+          country: event.target.value,
+        });
+      }
     },
   ];
 }
