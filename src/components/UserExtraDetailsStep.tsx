@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { User } from "./UserForm";
 import {
   createMuiTheme,
@@ -16,9 +16,11 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import countries from "../data/countries";
 
 interface UserExtraDetailsStepProps {
   nextStep: () => void;
+  previousStep: () => void;
   handleChange: (
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
@@ -44,6 +46,7 @@ const styles = {
 
 const UserExtraDetailsStep = ({
   nextStep,
+  previousStep,
   handleChange,
   values,
 }: UserExtraDetailsStepProps) => {
@@ -52,12 +55,11 @@ const UserExtraDetailsStep = ({
     nextStep();
   };
 
-  const handleSelectChange = (
-    event: ChangeEvent<{ name?: string | undefined; value: unknown }>,
-    child: React.ReactNode
-  ) => {
-    handleChange(event);
-  };
+  const [countriesList, setCountriesList] = useState(() => {
+    return countries.data.map((item: any) => {
+      return <MenuItem value={item.name}>{item.name}</MenuItem>;
+    });
+  });
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -74,18 +76,14 @@ const UserExtraDetailsStep = ({
         <Select
           id="country"
           value={values.country}
-          onChange={handleSelectChange}
+          onChange={(event) =>
+            handleChange(
+              event as React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+            )
+          }
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {fetch("countries.json")
-            .then((data) => data.json())
-            .then((data) => {
-              return data.map((item: any) => {
-                return <MenuItem value={item.name}>{item.name}</MenuItem>;
-              });
-            })}
+          <MenuItem value="None">None</MenuItem>
+          {countriesList}
         </Select>
         <br />
         <TextField
@@ -95,6 +93,14 @@ const UserExtraDetailsStep = ({
           defaultValue={values.lastName}
         />
         <br />
+        <Button
+          variant="contained"
+          color="primary"
+          style={styles.button}
+          onClick={previousStep}
+        >
+          Previous
+        </Button>
         <Button
           variant="contained"
           color="primary"

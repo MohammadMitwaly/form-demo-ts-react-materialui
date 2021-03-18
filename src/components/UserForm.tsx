@@ -1,5 +1,6 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState } from "react";
 import UserDetailsStep from "./UserDetailsStep";
+import UserExtraDetailsStep from "./UserExtraDetailsStep";
 
 export interface User {
   firstName: string;
@@ -14,9 +15,11 @@ function useFormFields<T>(
 ): [
   T,
   (
-    event:
-      | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-      | React.ChangeEvent<{ name?: string | undefined; value: unknown }>
+    event: React.ChangeEvent<
+      | HTMLTextAreaElement
+      | HTMLInputElement
+      | { name?: string | undefined; value: unknown }
+    >
   ) => void
 ] {
   const [inputs, setValues] = useState<T>(initialState);
@@ -24,12 +27,14 @@ function useFormFields<T>(
   return [
     inputs,
     function (
-      event:
-        | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-        | ChangeEvent<{
+      event: React.ChangeEvent<
+        | HTMLTextAreaElement
+        | HTMLInputElement
+        | {
             name?: string | undefined;
             value: unknown;
-          }>
+          }
+      >
     ) {
       if ("id" in event.target) {
         setValues({
@@ -57,7 +62,7 @@ export const UserForm = () => {
     job: "",
   });
 
-  const { firstName, lastName, age, country, job } = inputs;
+  // const { firstName, lastName, age, country, job } = inputs;
 
   const nextStep = () => {
     setStep((currStep) => currStep + 1);
@@ -77,7 +82,14 @@ export const UserForm = () => {
         />
       );
     case 1:
-      return <h1>Extra details step</h1>;
+      return (
+        <UserExtraDetailsStep
+          nextStep={nextStep}
+          previousStep={previousStep}
+          handleChange={handleInputChange}
+          values={inputs}
+        />
+      );
     case 2:
       return <h1>Confirm inputs step</h1>;
     case 3:
