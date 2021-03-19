@@ -58,21 +58,24 @@ const UserDetailsStep = ({
         </AppBar>
         <br />
         <TextField
-          placeholder="First Name"
+          label="First Name"
+          placeholder="What is your first name?"
           id="firstName"
           onChange={handleChange}
           defaultValue={values.firstName}
         />
         <br />
         <TextField
-          placeholder="Last Name"
+          label="Last Name"
+          placeholder="What is your last name?"
           id="lastName"
           onChange={handleChange}
           defaultValue={values.lastName}
         />
         <br />
         <TextField
-          placeholder="Age"
+          label="Age"
+          placeholder="How old are you?"
           id="age"
           type="number"
           onChange={handleChange}

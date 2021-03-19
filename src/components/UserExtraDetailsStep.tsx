@@ -55,7 +55,12 @@ const UserExtraDetailsStep = ({
     nextStep();
   };
 
-  const [countriesList, setCountriesList] = useState(() => {
+  const handlePreviousStep = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    previousStep();
+  };
+
+  const [countriesList /*setCountriesList*/] = useState(() => {
     return countries.data.map((item: any) => {
       return <MenuItem value={item.name}>{item.name}</MenuItem>;
     });
@@ -74,6 +79,7 @@ const UserExtraDetailsStep = ({
         </AppBar>
         <br />
         <Select
+          style={{ minWidth: 200 }}
           id="country"
           value={values.country}
           onChange={(event) =>
@@ -87,17 +93,18 @@ const UserExtraDetailsStep = ({
         </Select>
         <br />
         <TextField
+          label="Job"
           placeholder="What is your occupation?"
           id="job"
           onChange={handleChange}
-          defaultValue={values.lastName}
+          defaultValue={values.job}
         />
         <br />
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           style={styles.button}
-          onClick={previousStep}
+          onClick={handlePreviousStep}
         >
           Previous
         </Button>

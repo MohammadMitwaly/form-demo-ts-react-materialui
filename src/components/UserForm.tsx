@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import ConfirmStep from "./ConfirmStep";
+import SuccessStep from "./SuccessStep";
 import UserDetailsStep from "./UserDetailsStep";
 import UserExtraDetailsStep from "./UserExtraDetailsStep";
 
 export interface User {
   firstName: string;
   lastName: string;
-  age: number;
+  age: number | undefined;
   country: string;
   job: string;
 }
@@ -57,12 +59,10 @@ export const UserForm = () => {
   const [inputs, handleInputChange] = useFormFields<User>({
     firstName: "",
     lastName: "",
-    age: 0,
+    age: undefined,
     country: "",
     job: "",
   });
-
-  // const { firstName, lastName, age, country, job } = inputs;
 
   const nextStep = () => {
     setStep((currStep) => currStep + 1);
@@ -91,9 +91,15 @@ export const UserForm = () => {
         />
       );
     case 2:
-      return <h1>Confirm inputs step</h1>;
+      return (
+        <ConfirmStep
+          nextStep={nextStep}
+          previousStep={previousStep}
+          values={inputs}
+        />
+      );
     case 3:
-      return <h1>Submitted successfully</h1>;
+      return <SuccessStep />;
   }
 
   return <div></div>;
